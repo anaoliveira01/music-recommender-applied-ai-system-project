@@ -108,6 +108,12 @@ Where bias or unfairness could show up in systems like this:
 - The bias that stood out most was how catalog size silently shapes results. Thirteen of fifteen genres had only one song, so users preferring jazz or classical had no choice but to get the same result every session — no weight tuning could fix that. Real systems like Spotify face the same issue at scale: popular content gets recommended more, which makes it more popular, which gets it recommended more, all before any individual user has any influence.
 
 
+- Demo:
+
+![Screenshot 1](imgs/2026-04-14(1).png)
+![Screenshot 2](imgs/2026-04-14(2).png)
+![Screenshot 3](imgs/2026-04-14(3).png)
+
 ---
 
 ## 7. `model_card_template.md`
@@ -208,11 +214,3 @@ What I learned:
 - It made clear that a recommender is mostly a scoring formula, and the weights are where all the real decisions live.
 - Human judgement still matters where the numbers don't capture context - whether a song fits a funeral or a road trip, whether an artist has said something harmful, whether a user is burned out on a genre they technically still "prefer", etc.
 The system also has no concept of enough — it will keep surfacing the same songs because they score well.
-
-
-- Demo:
-
-![Screenshot 1](imgs/2026-04-14(1).png)
-![Screenshot 2](imgs/2026-04-14(2).png)
-![Screenshot 3](imgs/2026-04-14(3).png)
-
