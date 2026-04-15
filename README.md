@@ -180,34 +180,31 @@ Where the recommender struggles:
 
 ## 7. Evaluation
 
-How did you check your system
+How I checked the system:
 
-Examples:
-- You tried multiple user profiles and wrote down whether the results matched your expectations
-- You compared your simulation to what a real app like Spotify or YouTube tends to recommend
-- You wrote tests for your scoring logic
+- Four profiles were tested against the full 18-song catalog: a minimal starter profile (genre, mood, energy only), high energy pop, chill lofi, and deep intense rock. For each, the top-5 results and scores were printed and checked against intuition
+- Two automated tests were written and run with pytest. The first checks that recommend returns songs sorted by score with the best match first — a pop/happy/energy=0.8 user should receive the pop, happy song above all others. The second checks that explain_recommendation returns a non-empty string for any valid song and user pair.
+- The most revealing check was running the same profiles before and after implementing Recommender.recommend. Before the fix, every user received the same five songs (the first five rows of the CSV) regardless of their preferences. After the fix, chill lofi users received entirely different results from rock users, confirming personalization was working.
+- Weight sensitivity was also checked by rerunning profiles with mood weight reduced (4.0 to 1.5) or genre weight reduced (2.5 to 0.5). This showed that these numeric weights were the biggest influence on the results.
 
-You do not need a numeric metric, but if you used one, explain what it measures.
 
 ---
 
 ## 8. Future Work
 
-If you had more time, how would you improve this recommender
+I would improve this recommender by:
 
-Examples:
-
-- Add support for multiple users and "group vibe" recommendations
-- Balance diversity of songs instead of always picking the closest match
-- Use more features, like tempo ranges or lyric themes
+- Using negative preferences — the scoring is all positive signals. A user who dislikes metal or pop for example can't express that.
+- Multi-genre / multi-mood profiles — Right now UserProfile holds one genre and one mood. Changing favorite_genre to favorite_genres: List[str] with weighted bonuses per match would help users with diverse tastes.
+- Listening history / feedback loop — The system has no memory. A good extension would be to track songs the user has already received and filter or penalize repeats so the same catalog doesn't return the same results every session.
 
 ---
 
 ## 9. Personal Reflection
 
-A few sentences about what you learned:
+What I learned:
 
-- What surprised you about how your system behaved
-- How did building this change how you think about real music recommenders
-- Where do you think human judgment still matters, even if the model seems "smart"
-
+- The mood and genre weights dominated far more than expected compared to other features.
+- It made clear that a recommender is mostly a scoring formula, and the weights are where all the real decisions live.
+- Human judgement still matters where the numbers don't capture context - whether a song fits a funeral or a road trip, whether an artist has said something harmful, whether a user is burned out on a genre they technically still "prefer", etc.
+The system also has no concept of enough — it will keep surfacing the same songs because they score well.
