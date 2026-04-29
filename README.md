@@ -49,8 +49,6 @@ In the system diagram, data flows from the human user to the Streamlit app, then
 
 ### UML Snapshot
 
-This static image is included so the architecture is always visible on GitHub:
-
 ![System UML Diagram](imgs/mermaid-diagram-2026-04-28-155916.png)
 
 ### Mermaid Source
