@@ -24,6 +24,10 @@ The system follows a lightweight Retrieval-Augmented Generation style workflow:
 4. The AI layer explains why the top results match.
 5. If the Gemini API is unavailable, the system falls back to a local parser and local explanation path.
 
+## Video Walkthrough
+
+Loom walkthrough: [Watch the demo here](https://www.loom.com/share/416e65bee4b948b796f5a8aec9c27c68)
+
 ## Architecture Overview
 
 The system has four main parts:
@@ -48,6 +52,8 @@ In the system diagram, data flows from the human user to the Streamlit app, then
 ## System Diagram
 
 ### UML Snapshot
+
+This static image is included so the architecture is always visible on GitHub:
 
 ![System UML Diagram](imgs/mermaid-diagram-2026-04-28-155916.png)
 
