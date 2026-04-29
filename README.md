@@ -253,6 +253,12 @@ I also added a **local fallback path**. External APIs can fail because of quotas
 
 I tested both the original recommendation logic and the new AI integration points.
 
+This project includes multiple ways to prove the AI system works instead of only appearing to work:
+
+- **Automated tests:** `pytest` checks ranking behavior, parser output shape, consistency of recommendations, explanation generation, and fallback behavior when the external AI path fails.
+- **Logging and error handling:** `src/logger.py` records requests, parsing steps, explanations, and failures. This made it possible to diagnose issues such as missing API keys, quota failures, and logging portability problems.
+- **Human evaluation:** I manually reviewed recommendation outputs for prompts such as "something chill for a late night study session" and "something upbeat and danceable for a party" to confirm that the returned songs matched the intended mood and context.
+
 What worked:
 
 - The recommender correctly sorts songs by descending score.
@@ -281,6 +287,8 @@ Current automated test coverage includes:
 - parser output validation
 - fallback parser behavior
 
+**Testing summary:** 6 out of 6 automated tests passed. The biggest issues during development were not ranking bugs, but operational failures involving API quota limits, environment configuration, and logging assumptions. Reliability improved after adding explicit `.env` loading, clearer error handling, and a local fallback parser/explainer so the app still works when the external AI service is unavailable.
+
 ## Reflection
 
 This project taught me that AI features are most useful when they solve a real interface problem. The original recommender already had a working ranking engine, but it expected users to think like programmers by entering structured preferences. Adding natural-language interpretation made the system feel much closer to how a real person would search for music.
@@ -288,6 +296,24 @@ This project taught me that AI features are most useful when they solve a real i
 It also taught me that building AI systems is as much about failure handling as it is about model capability. A model API can be impressive when it works, but a production-minded system still needs logging, validation, and a backup plan when it does not. The final design reflects that lesson: a smaller but dependable system is often better engineering than a more impressive system that breaks easily.
 
 More broadly, this project reinforced that good problem-solving comes from layering tools thoughtfully. The best result here was not "replace everything with AI," but rather "use AI where it improves the human experience, and keep the underlying retrieval logic understandable and testable."
+
+### Limitations and Biases
+
+The biggest limitation in this system is the dataset itself. The catalog only contains 18 songs, and genre coverage is uneven, so some genres have much less variety than others. That means the recommender can over-repeat certain songs, under-serve niche tastes, and reflect the biases of the catalog rather than the full range of what a real listener might want. The fallback parser also uses simple keyword heuristics, which means nuanced prompts can still be interpreted imperfectly.
+
+### Potential Misuse and Safeguards
+
+This project could be misused if someone treated it like a fully personalized production recommender when it is really a classroom-scale prototype. For example, a user might assume the system deeply understands their taste, when in reality it is ranking against a small static dataset with limited context. To reduce that risk, I would keep the scope explicit in the README and UI, log failures clearly, validate parsed outputs before ranking, and preserve transparent recommendation reasons so users can see why songs were chosen.
+
+### What Surprised Me During Reliability Testing
+
+What surprised me most was that the hardest problems were not the ranking formula itself, but the operational issues around AI integration. The recommender logic was relatively stable, while the bigger failures came from API quotas, missing environment configuration, and assumptions about logging. That changed how I think about reliability: a system is not reliable just because the algorithm is correct; it also has to behave well when external dependencies fail.
+
+### Collaboration with AI
+
+Working with AI on this project was useful, but it also showed the importance of checking suggestions carefully. One genuinely helpful suggestion was using AI to translate natural-language requests into the structured preference format that the original recommender already understood. That let me improve usability without throwing away the existing ranking engine.
+
+One flawed suggestion was the repeated assumption that model or quota errors could be fixed simply by swapping providers or changing model names. That advice was too speculative and did not fully respect the need to verify what the actual problem was before making changes. The lesson for me was that AI can be a strong brainstorming and implementation partner, but it still needs human judgment, debugging discipline, and verification at every step.
 
 ## Repository Structure
 
